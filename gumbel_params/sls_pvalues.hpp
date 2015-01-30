@@ -51,6 +51,7 @@ Contents: P-values calculation routines
 
 #include "sls_normal_distr_array.hpp"
 
+double getArea();
 
 BEGIN_NCBI_SCOPE
 BEGIN_SCOPE(blast)
@@ -135,7 +136,6 @@ BEGIN_SCOPE(Sls)
                       //if==2: Invalid input parameters
                           //if=41: Memory allocation error
                 };
-
 
                 static double error_of_the_sum(//v1_+v2_
                 double v1_,

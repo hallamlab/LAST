@@ -99,7 +99,7 @@ AlignmentPot.o: AlignmentPot.cc AlignmentPot.hh Alignment.hh \
  ScoreMatrixRow.hh SegmentPair.hh
 AlignmentWrite.o: AlignmentWrite.cc Alignment.hh ScoreMatrixRow.hh \
  SegmentPair.hh GeneticCode.hh MultiSequence.hh VectorOrMmap.hh Mmap.hh \
- fileMap.hh stringify.hh Alphabet.hh
+ fileMap.hh stringify.hh Alphabet.hh 
 Alphabet.o: Alphabet.cc Alphabet.hh
 Centroid.o: Centroid.cc Centroid.hh GappedXdropAligner.hh \
  ScoreMatrixRow.hh GeneralizedAffineGapCosts.hh SegmentPair.hh \

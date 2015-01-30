@@ -152,6 +152,16 @@ void writeParameterWithError( const std::string& name, double p, double err ){
   std::cout << "\n";
 }
 
+double getLambda(){
+    const Mcf::LocalAlignmentEvaluer::GumbelParameters& g = evaluer.gumbelParameters();
+    return g.lambda;
+}
+
+double getK(){
+    const Mcf::LocalAlignmentEvaluer::GumbelParameters& g = evaluer.gumbelParameters();
+    return g.K;
+}
+
 void writeGumbelParameters(){
   const Mcf::LocalAlignmentEvaluer::GumbelParameters& g
       = evaluer.gumbelParameters();

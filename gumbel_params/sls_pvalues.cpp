@@ -40,14 +40,19 @@ Contents: Calculation of P-values using precalculated Gumbel parameters
 #include "sls_pvalues.hpp"
 #include "sls_alp_data.hpp"
 
+namespace{
+    double davidarea;
+}
+
+double getArea(){
+    return davidarea;
+}
 
 USING_NCBI_SCOPE;
 USING_SCOPE(blast);
 USING_SCOPE(Sls);
 
 const bool read_Sbs_par_flag=true;
-
-
 
 double pvalues::error_of_the_sum(//v1_+v2_
 double v1_,
@@ -1140,8 +1145,7 @@ vector<double> &P_values_errors)
                 // MCF: get E-values instead of p-values
                 //P_values[y-ymin_]=P;
                 P_values[y-ymin_]=area*par_.K*exp(-par_.lambda*y);
-                
-
+                davidarea=area; 
 
         };
         

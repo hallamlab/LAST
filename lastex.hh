@@ -18,5 +18,9 @@ void __makeScoreMatrix( const std::string& matrixFile );
 
 SequenceStatistics readStats( const std::string& fileName );
 
+double getLambda();
+
+double getK();
+
 #endif
 

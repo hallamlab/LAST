@@ -4,13 +4,15 @@
 #include "GeneticCode.hh"
 #include "MultiSequence.hh"
 #include "Alphabet.hh"
-#include "lastex.hh"
 
 #include <iomanip>
 #include <algorithm>
 #include <cassert>
 #include <iterator>  // ostream_iterator
 
+#include <cmath>
+#include "lastex.hh"
+#include "gumbel_params/sls_pvalues.hpp"
 
 
 // make C++ tolerable:
@@ -156,21 +158,28 @@ void Alignment::writeBlastOutput( const MultiSequence& seq1, const MultiSequence
   mismatches = alignLength - gaps - identityCount;
 
   evalue = evalueForSequences(score,s1, s2);
- 
+
+  double lambda = getLambda();
+  double k = getK();
+  double area = getArea();
+
+  double bitscore = (lambda*score-log(k))/log(2);
+  double evalue2 = area*pow(2,-bitscore);
+
   os << seq2.seqName(w2) << tab
      << seq1.seqName(w1) << tab
      << identities << tab
      << alignLength << tab
      << mismatches << tab
      << gaps << tab
-     << seqStart2 + 1 << tab
-     << seqStart2 + (alnEnd2 - alnBeg2) << tab
-     << seqStart1 - 1 << tab
-     << seqStart1 + (alnEnd1 - alnBeg1) << tab
-     << evalue << tab
-     << score << tab;
-  
-    os << '\n';
+     << (alnBeg2 - seqStart2) << tab
+     << (alnEnd2 -seqStart2) << tab
+     << (alnBeg1 - seqStart1) << tab
+     << (alnEnd1 -seqStart1) << tab
+     << evalue2 << tab
+     << bitscore;
+     os << '\n';
+
 }
 
 size_t Alignment::countIdentities(std::string& seq1String, std::string& seq2String) const{
@@ -233,6 +242,8 @@ void Alignment::writeTab( const MultiSequence& seq1, const MultiSequence& seq2,
      << alnEnd2 - alnBeg2 << '\t'
      << strand << '\t'
      << seq2.seqLen(w2) << '\t';
+
+  std::cout << (alnBeg1 - seqStart1) << "  " << (alnEnd1 -seqStart1) << " --  " << (alnBeg2 - seqStart2) << "  " << (alnEnd2 -seqStart2) << std::endl;
 
   for( CI(SegmentPair) i = blocks.begin(); i < blocks.end(); ++i ){
     if( i > blocks.begin() ){  // between each pair of aligned blocks:
