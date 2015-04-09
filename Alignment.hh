@@ -6,6 +6,7 @@
 #define ALIGNMENT_HH
 #include "ScoreMatrixRow.hh"
 #include "SegmentPair.hh"
+#include "LastalArguments.hh"
 #include <stddef.h>  // size_t
 #include <string>
 #include <vector>
@@ -66,8 +67,8 @@ struct Alignment{
 
    void write( const MultiSequence& seq1, const MultiSequence& seq2,
 	      char strand, bool isTranslated, const Alphabet& alph,
-	      int format, std::ostream& os,
-	      const AlignmentExtras& extras = AlignmentExtras() ) const;
+	      int format, std::ostream& os, LastalArguments &args,
+	      const AlignmentExtras& extras = AlignmentExtras()) const;
 
   // data:
   std::vector<SegmentPair> blocks;  // the gapless blocks of the alignment
@@ -105,7 +106,7 @@ struct Alignment{
 
   void writeBlastOutput( const MultiSequence& seq1, const MultiSequence& seq2,
 		 char strand, bool isTranslated, const Alphabet& alph, std::ostream& os,
-		 const AlignmentExtras& extras ) const;
+		 const AlignmentExtras& extras, LastalArguments &args ) const;
 
   void writeMaf( const MultiSequence& seq1, const MultiSequence& seq2,
 		 char strand, bool isTranslated, const Alphabet& alph,

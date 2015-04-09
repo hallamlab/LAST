@@ -52,7 +52,10 @@ LastalArguments::LastalArguments() :
   temperature(-1),  // depends on the score matrix
   gamma(1),
   geneticCodeFile(""),
-  verbosity(0){}
+  verbosity(0),
+  scoreCutoff(20),
+  evalueCutoff(1.0e-6){}
+
 
 void LastalArguments::fromArgs( int argc, char** argv, bool optionsOnly ){
   std::string usage =
@@ -109,6 +112,8 @@ Miscellaneous options (default settings):\n\
 -Q: input format: 0=fasta, 1=fastq-sanger, 2=fastq-solexa, 3=fastq-illumina,\n\
                   4=prb, 5=PSSM ("
     + stringify(inputFormat) + ")\n\
+-S: Optional bit-Score cutoff value (" + stringify(scoreCutoff) + ")\n\
+-E: Optional e-value cutoff value (" + stringify(evalueCutoff) + ") \n\
 \n\
 Report bugs to: last-align (ATmark) googlegroups (dot) com\n\
 LAST home page: http://last.cbrc.jp/\n\
@@ -117,7 +122,7 @@ LAST home page: http://last.cbrc.jp/\n\
   optind = 1;  // allows us to scan arguments more than once(???)
   int c;
   const char optionString[] =
-      "ho:u:s:f:r:q:p:a:b:A:B:c:F:x:y:z:d:e:Q:T:m:l:n:C:k:i:w:t:g:G:vj:";
+      "ho:u:s:f:r:q:p:a:b:A:B:c:F:x:y:z:d:e:Q:T:m:l:n:C:k:i:w:t:g:G:vj:S::E::";
   while( (c = getopt(argc, argv, optionString)) != -1 ){
     switch(c){
     case 'h':
@@ -245,6 +250,17 @@ LAST home page: http://last.cbrc.jp/\n\
       unstringify( outputType, optarg );
       if( outputType < 0 || outputType > 7 ) badopt( c, optarg );
       break;
+
+      //!!
+    case 'S':
+      unstringify(scoreCutoff, optarg );
+      //if( scoreCutoff < 20 ) scoreCutoff = 20;
+      break;
+    case 'E':
+      unstringify( evalueCutoff, optarg );
+      //if( evalueCutoff > 1.0e-8) evalueCutoff = 1.0e-8;
+      break;
+
     case '?':
       ERR( "bad option" );
     }

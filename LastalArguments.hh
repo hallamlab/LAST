@@ -80,6 +80,9 @@ struct LastalArguments{
   std::string geneticCodeFile;
   int verbosity;
 
+  double scoreCutoff;
+  double evalueCutoff;
+
   // positional arguments:
   std::string lastdbName;
   int inputStart;  // index in argv of first input filename

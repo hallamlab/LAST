@@ -3,10 +3,8 @@ CC  = gcc
 
 CXXFLAGS = -O3 -Wall -Wextra -Wcast-qual -Wswitch-enum -Wundef	\
 -Wcast-align -Wno-long-long -ansi -pedantic -m64 #-g
-# -Wconversion
-# -fomit-frame-pointer ?
 
-CFLAGS = -Wall -O2  -m64  # -g
+CFLAGS = -Wall -O3  -m64  # -g
 
 DBOBJ = Alphabet.o MultiSequence.o CyclicSubsetSeed.o	\
 SubsetSuffixArray.o LastdbArguments.o io.o fileMap.o	\

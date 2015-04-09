@@ -27,14 +27,14 @@
 #include "io.hh"
 #include "stringify.hh"
 #include "lastex.hh"
-
 #include "LastexArguments.hh"
-
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
 #include <ctime>
 #include <cstdlib>  // EXIT_SUCCESS, EXIT_FAILURE
+
+#include "gperftools/profiler.h"
 
 #define ERR(x) throw std::runtime_error(x)
 #define LOG(x) if( args.verbosity > 0 ) std::cerr << "lastal: " << x << '\n'
@@ -382,7 +382,7 @@ void alignGapless( SegmentPairPot& gaplessAlns,
         if( args.outputType == 1 ){  // we just want gapless alignments
           Alignment aln;
           aln.fromSegmentPair(sp);
-          aln.write( text, query, strand, args.isTranslated(), alph, args.outputFormat, out );
+          aln.write( text, query, strand, args.isTranslated(), alph, args.outputFormat, out, args);
         }
         else{
           gaplessAlns.add(sp);  // add the gapless alignment to the pot
@@ -507,7 +507,7 @@ void alignFinish( const AlignmentPot& gappedAlns,
     const Alignment& aln = gappedAlns.items[i];
     if( args.outputType < 4 ){
       aln.write( text, query, strand, args.isTranslated(),
-		 alph, args.outputFormat, out );
+		 alph, args.outputFormat, out, args);
     }
     else{  // calculate match probabilities:
       Alignment probAln;
@@ -520,7 +520,7 @@ void alignFinish( const AlignmentPot& gappedAlns,
 			 dis.i, dis.j, alph, extras,
 			 args.gamma, args.outputType );
       probAln.write( text, query, strand, args.isTranslated(),
-		     alph, args.outputFormat, out, extras );
+		     alph, args.outputFormat, out, args, extras );
     }
   }
 }
@@ -766,7 +766,6 @@ void  initializeEvalueCalulator(const std::string dbPrjFile, std::string dbfileP
 }
 
 void lastal( int argc, char** argv ){
-  std::clock_t startTime = std::clock();
 
   args.fromArgs( argc, argv );
   std::string matrixFile;
@@ -865,6 +864,7 @@ void lastal( int argc, char** argv ){
   //out << "# CPU time: " << (std::clock() - startTime + 0.0) / CLOCKS_PER_SEC
   //    << " seconds\n";
   if (!flush(out)) ERR( "write error" );
+
 }
 
 int main( int argc, char** argv )

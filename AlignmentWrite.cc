@@ -70,23 +70,25 @@ static void writeSignedDifference( size_t x, size_t y, std::ostream& os ){
 
 void Alignment::write( const MultiSequence& seq1, const MultiSequence& seq2,
 		       char strand, bool isTranslated, const Alphabet& alph,
-		       int format, std::ostream& os,
-		       const AlignmentExtras& extras ) const{
+		       int format, std::ostream& os, LastalArguments &args, 
+           const AlignmentExtras& extras) const{
   assert( !blocks.empty() );
 
   if( format == 0 ) 
        writeTab( seq1, seq2, strand, isTranslated, os, extras );
   else if( format == 2 )  {
-       writeBlastOutput( seq1, seq2, strand, isTranslated, alph,os, extras );
+       writeBlastOutput( seq1, seq2, strand, isTranslated, alph,os, extras, args );
   }
   else 
        writeMaf( seq1, seq2, strand, isTranslated, alph, os, extras );
 
 }
 
+//!!
 void Alignment::writeBlastOutput( const MultiSequence& seq1, const MultiSequence& seq2,
               char strand, bool isTranslated, const Alphabet& alph, std::ostream& os,
-			  const AlignmentExtras& extras ) const{
+			  const AlignmentExtras& extras, LastalArguments &args ) const{
+
   double fullScore = extras.fullScore;
 
   size_t alnBeg1 = beg1();
@@ -166,19 +168,22 @@ void Alignment::writeBlastOutput( const MultiSequence& seq1, const MultiSequence
   double bitscore = (lambda*score-log(k))/log(2);
   double evalue2 = area*pow(2,-bitscore);
 
-  os << seq2.seqName(w2) << tab
-     << seq1.seqName(w1) << tab
-     << identities << tab
-     << alignLength << tab
-     << mismatches << tab
-     << gaps << tab
-     << (alnBeg2 - seqStart2) << tab
-     << (alnEnd2 -seqStart2) << tab
-     << (alnBeg1 - seqStart1) << tab
-     << (alnEnd1 -seqStart1) << tab
-     << evalue2 << tab
-     << bitscore;
-     os << '\n';
+  if(bitscore >= args.scoreCutoff && evalue2 <= args.evalueCutoff){
+  
+    os << seq2.seqName(w2) << tab
+       << seq1.seqName(w1) << tab
+       << identities << tab
+       << alignLength << tab
+       << mismatches << tab
+       << gaps << tab
+       << (alnBeg2 - seqStart2) << tab
+       << (alnEnd2 -seqStart2) << tab
+       << (alnBeg1 - seqStart1) << tab
+       << (alnEnd1 -seqStart1) << tab
+       << evalue2 << tab
+       << bitscore;
+       os << '\n';
+  }
 
 }
 
