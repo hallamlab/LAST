@@ -34,8 +34,6 @@
 #include <ctime>
 #include <cstdlib>  // EXIT_SUCCESS, EXIT_FAILURE
 
-#include "gperftools/profiler.h"
-
 #define ERR(x) throw std::runtime_error(x)
 #define LOG(x) if( args.verbosity > 0 ) std::cerr << "lastal: " << x << '\n'
 
